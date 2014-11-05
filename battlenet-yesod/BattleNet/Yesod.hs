@@ -9,9 +9,9 @@ class YesodBattleNet app where
     battleNetKey :: app -> BattleNetApiKey
     battleNetHttp :: app -> Manager
 
-yesodBnet :: (MonadHandler m, YesodBattleNet (HandlerSite m)) => (Manager -> BattleNetApiKey -> a) -> m a
+yesodBnet :: (MonadHandler m, YesodBattleNet (HandlerSite m)) => (Manager -> BattleNetApiKey -> IO a) -> m a
 yesodBnet endpoint = do
     yesod <- getYesod
     let key = battleNetKey yesod
         manager = battleNetHttp yesod
-    return $ endpoint manager key
+    liftIO $ endpoint manager key
