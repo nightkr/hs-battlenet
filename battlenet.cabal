@@ -51,6 +51,7 @@ library
   exposed-modules:     BattleNet
                        BattleNet.ApiKey
                        BattleNet.WoW
+                       BattleNet.WoWStatic
                        BattleNet.Plumbing
   
   -- Modules included in this library but not exported.
