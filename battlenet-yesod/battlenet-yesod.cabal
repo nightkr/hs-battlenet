@@ -61,8 +61,7 @@ library
   build-depends:       base >=4.7 && <4.8,
                        http-conduit >=2.1.4 && <2.2,
                        battlenet >=0.1 && <0.2,
-                       yesod-core,
-                       yaml >=0.8 && <0.9
+                       yesod-core
   -- Directories containing source files.
   -- hs-source-dirs:
 
