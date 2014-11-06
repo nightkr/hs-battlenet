@@ -1,6 +1,6 @@
 module BattleNet.WoWStatic( WoWClassInfoId(..)
                           , WoWClassInfo(..), classes
-                          , WoWTalentInfo(..), talents
+                          , WoWTalentInfo(..), WoWSpecInfo(..), talents
                           ) where
 
 import BattleNet.ApiKey
@@ -23,8 +23,13 @@ newtype WoWClassesInfo = WoWClassesInfo [WoWClassInfo]
 extractClassesInfo :: WoWClassesInfo -> [WoWClassInfo]
 extractClassesInfo (WoWClassesInfo x) = x
 
+data WoWSpecInfo = WoWSpecInfo
+    { specName :: Text
+    } deriving Show
+
 data WoWTalentInfo = WoWTalentInfo
     { talentInfoClass :: Text
+    , talentInfoSpecs :: [WoWSpecInfo]
     } deriving Show
 
 instance FromJSON WoWClassInfo where
@@ -41,11 +46,20 @@ instance FromJSON WoWClassesInfo where
     parseJSON (Object v) = WoWClassesInfo <$> (v .: "classes" >>= parseJSON)
     parseJSON _ = mzero
 
+instance FromJSON WoWSpecInfo where
+    parseJSON (Object v) = do
+        specName <- v .: "name"
+        return WoWSpecInfo
+            { specName = specName
+            }
+
 instance FromJSON WoWTalentInfo where
     parseJSON (Object v) = do
         talentInfoClass <- v .: "class"
+        talentInfoSpecs <- v .: "specs"
         return WoWTalentInfo
             { talentInfoClass = talentInfoClass
+            , talentInfoSpecs = talentInfoSpecs
             }
     parseJSON _ = mzero
 
