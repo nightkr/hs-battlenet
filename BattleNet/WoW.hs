@@ -31,5 +31,15 @@ instance FromJSON WoWCharacterInfo where
             }
     parseJSON _ = mzero
 
+newtype UserCharactersWrapper = UserCharactersWrapper [WoWCharacterInfo]
+
+instance FromJSON UserCharactersWrapper where
+    parseJSON (Object v) = UserCharactersWrapper <$> v .: "characters"
+    parseJSON _ = mzero
+
 character :: Text -> Text -> Manager -> BattleNetApiKey -> IO WoWCharacterInfo
 character name realm = apiEndpoint ["wow", "character", name, realm] []
+
+userCharacters :: Text -> Manager -> BattleNetApiKey -> IO [WoWCharacterInfo]
+userCharacters accessToken manager key = unwrapChars <$> apiEndpoint ["wow", "user", "characters"] [("access_token", accessToken)] manager key
+    where unwrapChars (UserCharactersWrapper chars) = chars
