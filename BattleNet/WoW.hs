@@ -1,4 +1,4 @@
-module BattleNet.WoW(WoWCharacterInfo(..), character, userCharacters, guildMembers) where
+module BattleNet.WoW(WoWCharacterInfo(..), WoWGuildMemberInfo(..), character, userCharacters, guildMembers) where
 
 import BattleNet.ApiKey
 import BattleNet.Plumbing
