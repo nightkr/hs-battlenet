@@ -15,6 +15,7 @@ data WoWCharacterInfo = WoWCharacterInfo
     , characterRealm :: Text
     , characterClass :: WoWClassInfoId
     , characterThumbnail :: Text
+    , characterLevel :: Int
     } deriving Show
 
 instance FromJSON WoWCharacterInfo where
@@ -23,11 +24,13 @@ instance FromJSON WoWCharacterInfo where
         characterRealm <- v .: "realm"
         characterClass <- WoWClassInfoId <$> v .: "class"
         characterThumbnail <- v .: "thumbnail"
+        characterLevel <- v .: "level"
         return WoWCharacterInfo
             { characterName = characterName
             , characterRealm = characterRealm
             , characterClass = characterClass
             , characterThumbnail = characterThumbnail
+            , characterLevel = characterLevel
             }
     parseJSON _ = mzero
 
