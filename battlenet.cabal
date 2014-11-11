@@ -13,7 +13,7 @@ name:                battlenet
 version:             0.1.0.0
 
 -- A short (one-line) description of the package.
--- synopsis:            
+synopsis:            API client for Battle.Net
 
 -- A longer description of the package.
 -- description:         
