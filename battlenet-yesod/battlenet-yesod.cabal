@@ -10,13 +10,15 @@ name:                battlenet-yesod
 -- PVP summary:      +-+------- breaking API changes
 --                   | | +----- non-breaking API additions
 --                   | | | +--- code changes with no API change
-version:             0.1.0.0
+version:             0.1.0.1
 
 -- A short (one-line) description of the package.
--- synopsis:
+synopsis:            Yesod integration for the battlenet package
 
 -- A longer description of the package.
--- description:
+description:         Yesod integration for the battlenet package
+
+homepage:            https://github.com/teozkr/hs-battlenet/
 
 -- The license under which the package is released.
 license:             MIT
