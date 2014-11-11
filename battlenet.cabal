@@ -16,7 +16,9 @@ version:             0.1.0.0
 synopsis:            API client for Battle.Net
 
 -- A longer description of the package.
--- description:         
+description:         API client for Battle.Net, implemented using http-conduit. See the repository or Haddock for usage.
+
+website:             https://github.com/teozkr/hs-battlenet/
 
 -- The license under which the package is released.
 license:             MIT
