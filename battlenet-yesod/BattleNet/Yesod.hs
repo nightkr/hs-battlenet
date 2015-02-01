@@ -3,17 +3,18 @@ module BattleNet.Yesod(YesodBattleNet(..), yesodBnetWithApp, yesodBnet) where
 import BattleNet
 import Yesod.Core
 import Control.Monad
+import Data.Text
 import Network.HTTP.Conduit
 
 class YesodBattleNet app where
     battleNetKey :: app -> BattleNetApiKey
     battleNetHttp :: app -> Manager
 
-yesodBnetWithApp :: (YesodBattleNet app) => app -> (Manager -> BattleNetApiKey -> IO a) -> IO a
-yesodBnetWithApp yesod endpoint =
-        endpoint manager key
-    where key = battleNetKey yesod
+yesodBnetWithApp :: (YesodBattleNet app) => Text -> app -> (Manager -> BattleNetConnectionInfo -> IO a) -> IO a
+yesodBnetWithApp region yesod endpoint =
+        endpoint manager settings
+    where settings = BattleNetConnectionInfo (battleNetKey yesod) region
           manager = battleNetHttp yesod
 
-yesodBnet :: (MonadHandler m, YesodBattleNet (HandlerSite m)) => (Manager -> BattleNetApiKey -> IO a) -> m a
-yesodBnet endpoint = getYesod >>= liftIO . (flip yesodBnetWithApp endpoint)
+yesodBnet :: (MonadHandler m, YesodBattleNet (HandlerSite m)) => Text -> (Manager -> BattleNetConnectionInfo -> IO a) -> m a
+yesodBnet region endpoint = getYesod >>= liftIO . flip (yesodBnetWithApp region) endpoint

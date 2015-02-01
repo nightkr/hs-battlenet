@@ -64,13 +64,13 @@ instance FromJSON GuildMemberWrapper where
     parseJSON (Object v) = GuildMemberWrapper <$> v .: "members"
     parseJSON _ = mzero
 
-character :: Text -> Text -> Manager -> BattleNetApiKey -> IO WoWCharacterInfo
+character :: Text -> Text -> Manager -> BattleNetConnectionInfo -> IO WoWCharacterInfo
 character realm name = apiEndpoint ["wow", "character", realm, name] []
 
-userCharacters :: Text -> Manager -> BattleNetApiKey -> IO [WoWCharacterInfo]
+userCharacters :: Text -> Manager -> BattleNetConnectionInfo -> IO [WoWCharacterInfo]
 userCharacters accessToken manager key = unwrapChars <$> apiEndpoint ["wow", "user", "characters"] [("access_token", accessToken)] manager key
     where unwrapChars (UserCharactersWrapper chars) = chars
 
-guildMembers :: Text -> Text -> Manager -> BattleNetApiKey -> IO [WoWGuildMemberInfo]
+guildMembers :: Text -> Text -> Manager -> BattleNetConnectionInfo -> IO [WoWGuildMemberInfo]
 guildMembers realm name manager key = unwrapMembers <$> apiEndpoint ["wow", "guild", realm, name] [("fields", "members")] manager key
     where unwrapMembers (GuildMemberWrapper chars) = chars

@@ -63,8 +63,8 @@ instance FromJSON WoWTalentInfo where
             }
     parseJSON _ = mzero
 
-classes :: Manager -> BattleNetApiKey -> IO [WoWClassInfo]
+classes :: Manager -> BattleNetConnectionInfo -> IO [WoWClassInfo]
 classes manager key = extractClassesInfo <$> apiEndpoint ["wow", "data", "character", "classes"] [] manager key
 
-talents :: Manager -> BattleNetApiKey -> IO (Map WoWClassInfoId WoWTalentInfo)
+talents :: Manager -> BattleNetConnectionInfo -> IO (Map WoWClassInfoId WoWTalentInfo)
 talents manager key = mapKeys (WoWClassInfoId . read) <$> apiEndpoint ["wow", "data", "talents"] [] manager key

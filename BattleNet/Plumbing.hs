@@ -12,10 +12,10 @@ import Data.Aeson
 import qualified  Data.Aeson as Aeson
 import Network.HTTP.Conduit hiding (path, queryString)
 
-apiEndpointUrl' :: Text -> BattleNetApiKey -> [Text] -> [(Text, Text)] -> Text
-apiEndpointUrl' baseDomain key parts queryString = Data.Text.concat $ mconcat
+apiEndpointUrl' :: Text -> BattleNetConnectionInfo -> [Text] -> [(Text, Text)] -> Text
+apiEndpointUrl' baseDomain settings parts queryString = Data.Text.concat $ mconcat
         [ ["https://"
-          , bnetRegion key
+          , bnetRegion settings
           , "."
           , baseDomain
           , "/"]
@@ -26,12 +26,12 @@ apiEndpointUrl' baseDomain key parts queryString = Data.Text.concat $ mconcat
           renderedQueryStringParam (k, v) = [k, "=", v]
           renderedQueryStringParams = mconcat . intersperse ["&"] . fmap renderedQueryStringParam
 
-apiEndpointUrl :: [Text] -> [(Text, Text)] -> BattleNetApiKey -> Text
-apiEndpointUrl parts queryString key = apiEndpointUrl' "api.battle.net" key parts (("apikey", bnetApiKey key) : queryString)
+apiEndpointUrl :: [Text] -> [(Text, Text)] -> BattleNetConnectionInfo -> Text
+apiEndpointUrl parts queryString settings = apiEndpointUrl' "api.battle.net" settings parts (("apikey", bnetApiKeyText $ bnetApiKey settings) : queryString)
 
-apiEndpoint :: FromJSON a => [Text] -> [(Text, Text)] -> Manager -> BattleNetApiKey -> IO a
-apiEndpoint parts queryString manager key = do
-    path <- parseUrl $ unpack $ apiEndpointUrl parts queryString key
+apiEndpoint :: FromJSON a => [Text] -> [(Text, Text)] -> Manager -> BattleNetConnectionInfo -> IO a
+apiEndpoint parts queryString manager settings = do
+    path <- parseUrl $ unpack $ apiEndpointUrl parts queryString settings
     response <- responseBody <$> httpLbs path manager
     let decoded = Aeson.decode response
     return $ fromMaybe (error $ mconcat ["Invalid response from ", show path, ": ", show response]) decoded

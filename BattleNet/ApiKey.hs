@@ -1,9 +1,14 @@
-module BattleNet.ApiKey(BattleNetApiKey(..)) where
+module BattleNet.ApiKey(BattleNetApiKey(..), BattleNetConnectionInfo(..)) where
 
 import Data.Text
 
 data BattleNetApiKey = BattleNetApiKey
-    { bnetApiKey :: Text
+    { bnetApiKeyText :: Text
     , bnetApiSecret :: Text
+    }
+
+
+data BattleNetConnectionInfo = BattleNetConnectionInfo
+    { bnetApiKey :: BattleNetApiKey
     , bnetRegion :: Text
     }
